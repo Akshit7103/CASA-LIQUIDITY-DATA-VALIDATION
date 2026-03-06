@@ -2,445 +2,111 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>CASA Liquidity Intelligence</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CASA Liquidity Validation</title>
   <style>
-    :root {
-      --bg:       #070b12;
-      --surface:  #0e1520;
-      --surf2:    #131d2e;
-      --border:   rgba(255,255,255,0.06);
-      --gold:     #e8a045;
-      --blue:     #5ba4f5;
-      --green:    #34d399;
-      --red:      #f87171;
-      --text:     #e2e8f0;
-      --muted:    #64748b;
-      --sidebar-w: 224px;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Outfit', system-ui, sans-serif;
-      display: flex;
-    }
-
-    /* ─── Sidebar ─── */
-    .sidebar {
-      position: fixed; inset: 0 auto 0 0;
-      width: var(--sidebar-w);
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex; flex-direction: column;
-      z-index: 100; overflow-y: auto;
-      scrollbar-width: none;
-    }
-    .sb-logo {
-      padding: 32px 24px 28px;
-      border-bottom: 1px solid var(--border);
-    }
-    .sb-wordmark {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 28px; font-weight: 700;
-      color: var(--gold); letter-spacing: -1px; line-height: 1;
-    }
-    .sb-tagline {
-      font-size: 11px; color: var(--muted);
-      letter-spacing: 1.5px; text-transform: uppercase;
-      margin-top: 6px;
-    }
-    .sb-section {
-      font-size: 9px; font-weight: 600;
-      letter-spacing: 2px; text-transform: uppercase;
-      color: var(--muted); padding: 22px 24px 8px; opacity: 0.55;
-    }
-    .nav-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 9px 24px;
-      color: var(--muted); text-decoration: none;
-      font-size: 12.5px; font-weight: 400;
-      border-left: 2px solid transparent;
-      transition: all 0.15s;
-    }
-    .nav-item:hover {
-      color: var(--text); background: rgba(255,255,255,0.03);
-      border-left-color: var(--gold);
-    }
-    .nav-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; color: var(--muted); min-width: 20px; opacity: 0.5;
-    }
-    .nav-item.model-link { color: var(--gold); opacity: 0.9; }
-    .nav-item.model-link:hover { opacity: 1; }
-    .sb-footer {
-      margin-top: auto; padding: 20px 24px;
-      border-top: 1px solid var(--border);
-      font-size: 10px; color: var(--muted); opacity: 0.45; line-height: 1.8;
-    }
-
-    /* ─── Main ─── */
-    .main {
-      margin-left: var(--sidebar-w);
-      flex: 1; padding: 0;
-    }
-
-    /* Hero */
-    .hero {
-      position: relative;
-      padding: 64px 56px 52px;
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(232,160,69,0.06) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(91,164,245,0.05) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; font-weight: 500;
-      color: var(--gold); letter-spacing: 3px; text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-    .hero h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(36px, 4vw, 56px);
-      font-weight: 600; line-height: 1.1;
-      color: var(--text); letter-spacing: -1px;
-      margin-bottom: 16px;
-    }
-    .hero h1 em {
-      font-style: italic; color: var(--gold);
-    }
-    .hero-sub {
-      font-size: 15px; color: var(--muted); max-width: 520px; line-height: 1.7;
-      margin-bottom: 36px;
-    }
-    .hero-pills {
-      display: flex; gap: 10px; flex-wrap: wrap;
-    }
-    .pill {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; padding: 5px 14px; border-radius: 20px;
-      border: 1px solid var(--border); color: var(--muted);
-      background: rgba(255,255,255,0.03);
-    }
-    .pill.gold { border-color: rgba(232,160,69,0.3); color: var(--gold); background: rgba(232,160,69,0.06); }
-    .pill.blue { border-color: rgba(91,164,245,0.3); color: var(--blue); background: rgba(91,164,245,0.06); }
-    .pill.green { border-color: rgba(52,211,153,0.3); color: var(--green); background: rgba(52,211,153,0.06); }
-
-    /* Metrics strip */
-    .metrics-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .metric-cell {
-      padding: 28px 36px;
-      border-right: 1px solid var(--border);
-    }
-    .metric-cell:last-child { border-right: none; }
-    .mc-label {
-      font-size: 10px; font-weight: 500; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
-    }
-    .mc-value {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px; font-weight: 600; color: var(--text); line-height: 1;
-    }
-    .mc-value.gold { color: var(--gold); }
-    .mc-value.blue { color: var(--blue); }
-    .mc-value.green { color: var(--green); }
-    .mc-value.red  { color: var(--red); }
-    .mc-sub {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; color: var(--muted); margin-top: 6px;
-    }
-
-    /* Section */
-    .section { padding: 48px 56px; }
-    .section-header {
-      display: flex; align-items: baseline; gap: 16px; margin-bottom: 28px;
-    }
-    .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 26px; font-weight: 500; color: var(--text);
-      letter-spacing: -0.5px;
-    }
-    .section-count {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; color: var(--muted); letter-spacing: 2px;
-    }
-
-    /* Dashboard grid */
-    .dash-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-    }
-    .dash-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px; padding: 24px;
-      text-decoration: none; color: inherit;
-      transition: all 0.2s;
-      display: block; position: relative; overflow: hidden;
-    }
-    .dash-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: var(--gold); transform: scaleX(0); transform-origin: left;
-      transition: transform 0.25s;
-    }
-    .dash-card:hover {
-      border-color: rgba(232,160,69,0.2);
-      background: var(--surf2);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
-    }
-    .dash-card:hover::before { transform: scaleX(1); }
-    .dash-card.model-card::before { background: var(--blue); }
-    .dash-card.model-card:hover { border-color: rgba(91,164,245,0.2); }
-    .dc-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; color: var(--muted); letter-spacing: 1px;
-      margin-bottom: 10px; opacity: 0.6;
-    }
-    .dc-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 19px; font-weight: 600; color: var(--text);
-      margin-bottom: 8px; letter-spacing: -0.3px;
-    }
-    .dc-desc {
-      font-size: 12px; color: var(--muted); line-height: 1.6;
-    }
-    .dc-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; padding: 4px 10px; border-radius: 4px;
-      background: rgba(232,160,69,0.08); color: var(--gold);
-      border: 1px solid rgba(232,160,69,0.15);
-    }
-    .dc-badge.blue-badge {
-      background: rgba(91,164,245,0.08); color: var(--blue);
-      border-color: rgba(91,164,245,0.15);
-    }
-    .dc-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--gold);
-    }
-    .dc-dot.blue { background: var(--blue); }
-
-    .footer {
-      padding: 40px 56px;
-      border-top: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 16px;
-    }
-    .footer-left {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 16px; color: var(--muted); font-weight: 400;
-    }
-    .footer-right {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; color: var(--muted); opacity: 0.5;
-      letter-spacing: 0.5px; line-height: 2;
-    }
-
-    @media (max-width: 900px) {
-      .sidebar { width: 56px; }
-      .main { margin-left: 56px; }
-      .hero { padding: 40px 24px 36px; }
-      .section { padding: 36px 24px; }
-      .metrics-strip { grid-template-columns: repeat(2,1fr); }
-      .footer { padding: 30px 24px; }
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);min-height:100vh;color:#333}
+    .header{background:linear-gradient(135deg,#0f3460,#16213e);color:white;padding:30px 20px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+    .header h1{font-size:2.2em;margin-bottom:10px}
+    .header p{opacity:.8;font-size:1.1em}
+    .container{max-width:1400px;margin:0 auto;padding:30px 20px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:30px}
+    .card{background:white;border-radius:15px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,.1);transition:transform .3s}
+    .card:hover{transform:translateY(-5px)}
+    .card h3{color:#0f3460;margin-bottom:15px;font-size:1.2em;border-bottom:2px solid #e94560;padding-bottom:10px}
+    .metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee}
+    .metric:last-child{border-bottom:none}
+    .ml{color:#666}.mv{font-weight:bold;color:#0f3460}
+    .pos{color:#2ca02c}.neg{color:#d62728}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:20px}
+    .link{background:white;border-radius:15px;padding:25px;text-decoration:none;color:inherit;box-shadow:0 10px 30px rgba(0,0,0,.1);transition:all .3s;border-left:5px solid #e94560;display:block}
+    .link:hover{transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,0,0,.2)}
+    .link.model{border-left:5px solid #ff7f0e;background:linear-gradient(135deg,#fff8f0,#fff)}
+    .link h4{color:#0f3460;margin-bottom:10px;font-size:1.1em}
+    .link p{color:#666;font-size:.9em;line-height:1.5}
+    .badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:bold}
+    .bg{background:#d4edda;color:#155724}.bw{background:#fff3cd;color:#856404}.bb{background:#f8d7da;color:#721c24}
+    h2.sec{color:white;margin:30px 0 15px;font-size:1.4em}
+    .footer{text-align:center;padding:30px;color:white;opacity:.7;font-size:.9em}
   </style>
 </head>
 <body>
-
-<!-- Sidebar -->
-<aside class="sidebar">
-  <div class="sb-logo">
-    <div class="sb-wordmark">CASA</div>
-    <div class="sb-tagline">Liquidity Intelligence</div>
+  <div class="header">
+    <h1>CASA Liquidity Data Validation</h1>
+    <p>10-Year Analysis (2017–2026) | Current Account + Savings Account</p>
   </div>
-  <nav>
-    <a href="index.html" class="nav-item" style="color:var(--text);border-left-color:var(--gold);background:rgba(232,160,69,0.05);">
-      <span class="nav-num"></span><span>Overview</span>
-    </a>
-    <div class="sb-section">Validation</div>
-    <a href="dashboards/Check1_DataQuality_Dashboard.html" class="nav-item"><span class="nav-num">01</span><span>Data Quality</span></a>
-    <a href="dashboards/Check2_Detrending_Dashboard.html"  class="nav-item"><span class="nav-num">02</span><span>Detrending</span></a>
-    <a href="dashboards/Check3_Seasonality_Dashboard.html" class="nav-item"><span class="nav-num">03</span><span>Seasonality</span></a>
-    <a href="dashboards/Check4_Stationarity_Dashboard.html"class="nav-item"><span class="nav-num">04</span><span>Stationarity</span></a>
-    <a href="dashboards/Check5_Normality_Dashboard.html"   class="nav-item"><span class="nav-num">05</span><span>Normality</span></a>
-    <a href="dashboards/Check6_Volatility_Dashboard.html"  class="nav-item"><span class="nav-num">06</span><span>Volatility</span></a>
-    <a href="dashboards/Check8_MacroCorrelation_Dashboard.html" class="nav-item"><span class="nav-num">07</span><span>Macro Correlation</span></a>
-    <div class="sb-section">Model Library</div>
-    <a href="dashboards/Check9_Models_Dashboard.html" class="nav-item model-link"><span class="nav-num">08</span><span>Forecasting Models</span></a>
-  </nav>
-  <div class="sb-footer">
-    CASA Behavioral<br>Liquidity Risk Modeling<br>© 2026 Protiviti Global
-  </div>
-</aside>
 
-<!-- Main -->
-<main class="main">
+  <div class="container">
+    <div class="cards">
+      <div class="card">
+        <h3>Current Account (CA)</h3>
+        <div class="metric"><span class="ml">Total Records</span><span class="mv">3,651</span></div>
+        <div class="metric"><span class="ml">Missing Values</span><span class="mv">36 (0.99%)</span></div>
+        <div class="metric"><span class="ml">10-Year Growth</span><span class="mv neg">-15.4%</span></div>
+        <div class="metric"><span class="ml">Mean Balance</span><span class="mv">55.42T</span></div>
+      </div>
+      <div class="card">
+        <h3>Savings Account (SA)</h3>
+        <div class="metric"><span class="ml">Total Records</span><span class="mv">3,651</span></div>
+        <div class="metric"><span class="ml">Missing Values</span><span class="mv">36 (0.99%)</span></div>
+        <div class="metric"><span class="ml">10-Year Growth</span><span class="mv pos">+85.3%</span></div>
+        <div class="metric"><span class="ml">Mean Balance</span><span class="mv">102.14T</span></div>
+      </div>
+      <div class="card">
+        <h3>Data Quality Score</h3>
+        <div class="metric"><span class="ml">Overall Score</span><span class="mv">85/100</span></div>
+        <div class="metric"><span class="ml">Completeness</span><span class="mv pos">99.0%</span></div>
+        <div class="metric"><span class="ml">Data Period</span><span class="mv">2017–2026</span></div>
+        <div class="metric"><span class="ml">Status</span><span class="badge bg">VALIDATED</span></div>
+      </div>
+    </div>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-eyebrow">Behavioral Liquidity Risk Modeling</div>
-    <h1>CASA <em>Liquidity</em><br>Data Validation</h1>
-    <p class="hero-sub">
-      Comprehensive statistical validation of Current Account &amp; Savings Account
-      data across 7 checks — detrending, seasonality, stationarity, normality,
-      volatility, macro correlation, and model forecasting.
-    </p>
-    <div class="hero-pills">
-      <span class="pill gold">10-Year Dataset</span>
-      <span class="pill">3,651 Daily Records</span>
-      <span class="pill blue">2017 – 2026</span>
-      <span class="pill green">Validated</span>
+    <h2 class="sec">Validation Dashboards</h2>
+    <div class="grid">
+      <a href="dashboards/Check1_DataQuality_Dashboard.html" class="link">
+        <h4>1. Data Quality</h4>
+        <p>Missing data detection, outlier identification, and treatment comparison</p>
+      </a>
+      <a href="dashboards/Check2_Detrending_Dashboard.html" class="link">
+        <h4>2. Detrending Analysis</h4>
+        <p>Blue = Actual · Orange = Trend Slope · Red Dot = Detrended | CA & SA indexed comparison</p>
+      </a>
+      <a href="dashboards/Check3_Seasonality_Dashboard.html" class="link">
+        <h4>3. Seasonality Analysis</h4>
+        <p>Salary cycle day-of-month effects (green = inflow, red = outflow) + deseasonalized series</p>
+      </a>
+      <a href="dashboards/Check4_Stationarity_Dashboard.html" class="link">
+        <h4>4. Stationarity Tests</h4>
+        <p>ADF test results, rolling statistics, first differencing</p>
+      </a>
+      <a href="dashboards/Check5_Normality_Dashboard.html" class="link">
+        <h4>5. Normality Analysis</h4>
+        <p>Returns distribution, Q-Q plots, Jarque-Bera test results</p>
+      </a>
+      <a href="dashboards/Check6_Volatility_Dashboard.html" class="link">
+        <h4>6. Volatility Analysis</h4>
+        <p>Tenor-wise volatility O/N → 10Y | Rolling 30d vol | Mean, Median & Std by tenor</p>
+      </a>
+      <a href="dashboards/Check8_MacroCorrelation_Dashboard.html" class="link">
+        <h4>7. Macro Correlation</h4>
+        <p>Correlation with GDP, Inflation, USD/INR, Unemployment indicators</p>
+      </a>
     </div>
-  </section>
 
-  <!-- Metrics strip -->
-  <div class="metrics-strip">
-    <div class="metric-cell">
-      <div class="mc-label">CA Total Records</div>
-      <div class="mc-value gold">3,651</div>
-      <div class="mc-sub">Daily observations</div>
-    </div>
-    <div class="metric-cell">
-      <div class="mc-label">CA 10-Year Change</div>
-      <div class="mc-value red">−15.4%</div>
-      <div class="mc-sub">Declining balance trend</div>
-    </div>
-    <div class="metric-cell">
-      <div class="mc-label">SA 10-Year Change</div>
-      <div class="mc-value green">+85.3%</div>
-      <div class="mc-sub">Strong growth trajectory</div>
-    </div>
-    <div class="metric-cell">
-      <div class="mc-label">Data Quality Score</div>
-      <div class="mc-value blue">85 / 100</div>
-      <div class="mc-sub">Completeness 99.0%</div>
-    </div>
-    <div class="metric-cell">
-      <div class="mc-label">Missing Values</div>
-      <div class="mc-value">36</div>
-      <div class="mc-sub">0.99% of dataset</div>
-    </div>
-    <div class="metric-cell">
-      <div class="mc-label">Validation Checks</div>
-      <div class="mc-value gold">7</div>
-      <div class="mc-sub">Statistical tests</div>
+    <h2 class="sec">📊 Model Library</h2>
+    <div class="grid">
+      <a href="dashboards/Check9_Models_Dashboard.html" class="link model">
+        <h4>8. Forecasting Models</h4>
+        <p>Interactive dropdown — 7 models: <strong>Average · Std Dev · Median · Historical VaR · Parametric VaR · EWMA · ARIMA(1,1,1)</strong><br><br>
+        Historical data (last 500 days) + 180-day forward forecast per model</p>
+      </a>
     </div>
   </div>
 
-  <!-- Validation Dashboards -->
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title">Validation Dashboards</h2>
-      <span class="section-count">07 CHECKS</span>
-    </div>
-    <div class="dash-grid">
-
-      <a href="dashboards/Check1_DataQuality_Dashboard.html" class="dash-card">
-        <div class="dc-num">CHECK 01</div>
-        <div class="dc-title">Data Quality</div>
-        <div class="dc-desc">Missing data detection, outlier identification via IQR &amp; Z-score, treatment comparison pre/post.</div>
-        <div class="dc-badge"><span class="dc-dot"></span>IQR · Z-Score</div>
-      </a>
-
-      <a href="dashboards/Check2_Detrending_Dashboard.html" class="dash-card">
-        <div class="dc-num">CHECK 02</div>
-        <div class="dc-title">Detrending Analysis</div>
-        <div class="dc-desc">Actual (gold) vs trend slope (pink) vs detrended series (dotted). Indexed 10-year comparison.</div>
-        <div class="dc-badge"><span class="dc-dot"></span>CA −15.4% · SA +85.3%</div>
-      </a>
-
-      <a href="dashboards/Check3_Seasonality_Dashboard.html" class="dash-card">
-        <div class="dc-num">CHECK 03</div>
-        <div class="dc-title">Seasonality Analysis</div>
-        <div class="dc-desc">Salary cycle day-of-month effects — inflow (days 1–5) vs outflow (days 27–31). Deseasonalized series.</div>
-        <div class="dc-badge"><span class="dc-dot"></span>STL Decomposition</div>
-      </a>
-
-      <a href="dashboards/Check4_Stationarity_Dashboard.html" class="dash-card">
-        <div class="dc-num">CHECK 04</div>
-        <div class="dc-title">Stationarity Tests</div>
-        <div class="dc-desc">ADF &amp; KPSS tests, rolling mean/std, first differenced series. CA stationary · SA non-stationary.</div>
-        <div class="dc-badge"><span class="dc-dot"></span>ADF · KPSS</div>
-      </a>
-
-      <a href="dashboards/Check5_Normality_Dashboard.html" class="dash-card">
-        <div class="dc-num">CHECK 05</div>
-        <div class="dc-title">Normality Analysis</div>
-        <div class="dc-desc">Returns distribution with normal curve overlay, Q-Q plots, Jarque-Bera test. Both non-normal (fat tails).</div>
-        <div class="dc-badge"><span class="dc-dot"></span>JB · Shapiro-Wilk</div>
-      </a>
-
-      <a href="dashboards/Check6_Volatility_Dashboard.html" class="dash-card">
-        <div class="dc-num">CHECK 06</div>
-        <div class="dc-title">Volatility Analysis</div>
-        <div class="dc-desc">All 13 tenors O/N → 20Y. Rolling 30-day vol, tenor-wise annualised vol, mean/median by tenor.</div>
-        <div class="dc-badge"><span class="dc-dot"></span>ARCH-LM · 13 Tenors</div>
-      </a>
-
-      <a href="dashboards/Check8_MacroCorrelation_Dashboard.html" class="dash-card">
-        <div class="dc-num">CHECK 07</div>
-        <div class="dc-title">Macro Correlation</div>
-        <div class="dc-desc">Correlation with GDP, Inflation, USD/INR, Unemployment indicators across the 10-year horizon.</div>
-        <div class="dc-badge"><span class="dc-dot"></span>Pearson · Spearman</div>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- Model Library -->
-  <section class="section" style="padding-top:0">
-    <div class="section-header">
-      <h2 class="section-title">Model Library</h2>
-      <span class="section-count">07 MODELS</span>
-    </div>
-    <div class="dash-grid">
-      <a href="dashboards/Check9_Models_Dashboard.html" class="dash-card model-card">
-        <div class="dc-num" style="color:var(--blue)">MODEL LIBRARY</div>
-        <div class="dc-title">Forecasting Models</div>
-        <div class="dc-desc">
-          Interactive dropdown — switch between 7 forecasting models.
-          Historical last 500 days + 180-day forward projection for both CA and SA.
-          <br><br>
-          <strong style="color:var(--text);font-size:11px;">
-            Average · Std Dev · Median · Historical VaR · Parametric VaR · EWMA · ARIMA(1,1,1)
-          </strong>
-        </div>
-        <div class="dc-badge blue-badge"><span class="dc-dot blue"></span>180-Day Forecast</div>
-      </a>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-left">CASA Behavioral Liquidity Risk Modeling</div>
-    <div class="footer-right">
-      Protiviti Global · March 2026<br>
-      akshit.mahajan@protivitiglobal.in
-    </div>
-  </footer>
-
-</main>
+  <div class="footer">
+    <p>CASA Behavioral Liquidity Risk Modeling | Protiviti Global</p>
+    <p>Updated: March 2026 | akshit.mahajan@protivitiglobal.in</p>
+  </div>
 </body>
 </html>
